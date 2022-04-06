@@ -23,7 +23,6 @@
         <div>
           <button @click="createBox" class="btn2">创建</button>
         </div>
-        <!-- <button @click="deleteWar">销毁</button> -->
     </div>
     <div id="scene_main"></div>
   </div>
@@ -129,7 +128,7 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
-
+    overflow: hidden;
     .button {
         width: 200px;
         height: 150px;
@@ -167,6 +166,11 @@ export default {
     #scene_main {
         width: 100%;
         height: 100%;
+
+        canvas {
+          width: 100%;
+          height: 100%;
+        }
     }
 }
 </style>

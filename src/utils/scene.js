@@ -1,9 +1,9 @@
-const right = require('../../public/static/images/skybox/远山_RT.jpg');
-const left = require('../../public/static/images/skybox/远山_LF.jpg');
-const top = require('../../public/static/images/skybox/远山_UP.jpg');
-const bottom = require('../../public/static/images/skybox/远山_DN.jpg');
-const back = require('../../public/static/images/skybox/远山_BK.jpg');
-const front = require('../../public/static/images/skybox/远山_FR.jpg');
+const right = require('../../public/static/images/skybox/右边.jpg');
+const left = require('../../public/static/images/skybox/左边.jpg');
+const top = require('../../public/static/images/skybox/顶部.jpg');
+const bottom = require('../../public/static/images/skybox/底部.jpg');
+const back = require('../../public/static/images/skybox/后边.jpg');
+const front = require('../../public/static/images/skybox/前边.jpg');
 const floorBg = require('../../public/static/images/floor.jpg');
 const boxBg = require('../../public/static/images/box.png');
 
@@ -42,7 +42,7 @@ export default class Scene {
 
     // 初始化相机
     initCamera = () => {
-        this.camera = new THREE.PerspectiveCamera(80, 1, 1,1500);
+        this.camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1500);
         this.camera.name = 'mainCamrea';
         window.jcamera = this.camera;
     }
@@ -67,8 +67,9 @@ export default class Scene {
  
          const skyboxShader = THREE.ShaderLib['cube'];
          skyboxShader.uniforms['tCube'].value = skyboxCubemap;
+         const { length, width, height } = window.config.sceneParams.scene;
          const obj = new THREE.Mesh(
-             new THREE.BoxGeometry( 1000, 1000, 1000 ),
+             new THREE.BoxGeometry( length, width, height ),
              new THREE.ShaderMaterial({
                  fragmentShader : skyboxShader.fragmentShader,
                  vertexShader : skyboxShader.vertexShader,
@@ -85,7 +86,7 @@ export default class Scene {
         this.renderer = new THREE.WebGLRenderer({
           antialias: true
         });
-        this.renderer.setSize(this.target.clientHeight - 25, this.target.clientWidth - 25);
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(0x4682B4, 1.0);
         this.target.append(this.renderer.domElement);
         this.renderer.render(this.scene, this.camera);
@@ -213,7 +214,7 @@ export default class Scene {
 
     // 摄像机控制
     openOrbitControls = () => {
-        //鼠标操作旋转、缩放,OrbitControls需要单独引入
+        //鼠标操作旋转、缩放
         this.orbitControls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
         // 限制zoom缩放
         this.orbitControls.minDistance = window.config.sceneParams.carams.minDistance;
