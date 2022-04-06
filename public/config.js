@@ -14,7 +14,7 @@ window.config = {
         // 相机配置
         carams: {
             // 控制鼠标上垂直旋转的角度上限 区间【0-Math.PI(3.14)】
-            maxPolarAngle: 3,
+            maxPolarAngle: 1.4,
             // 限制鼠标可缩放最小值
             minDistance: 3,
             // 限制鼠标可缩放最大值
