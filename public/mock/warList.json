@@ -1,0 +1,47 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "name": "仓库A",
+            "id": "war001",
+            "width": 30,
+            "height": 10,
+            "length": 60
+          },
+          {
+            "name": "仓库B",
+            "id": "war002",
+            "width": 30,
+            "height": 10,
+            "length": 60
+          },
+          {
+            "name": "仓库C",
+            "id": "war003",
+            "width": 30,
+            "height": 10,
+            "length": 60
+          },
+          {
+            "name": "仓库D",
+            "id": "war004",
+            "width": 30,
+            "height": 10,
+            "length": 60
+          },
+          {
+            "name": "仓库E",
+            "id": "war005",
+            "width": 30,
+            "height": 10,
+            "length": 60
+          },
+          {
+            "name": "仓库F",
+            "id": "war006",
+            "width": 30,
+            "height": 10,
+            "length": 60
+          }
+    ]
+}

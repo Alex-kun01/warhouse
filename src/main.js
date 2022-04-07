@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
 
+Vue.prototype.$bus = new Vue();
 Vue.config.productionTip = false
 
 new Vue({

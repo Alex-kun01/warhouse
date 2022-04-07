@@ -22,9 +22,8 @@ export default {
 .date_time {
   width: 100%;
   height: 50px;
-  background: rgba(255, 255, 255, .3);
-  // filter: blur(6px);
-  backdrop-filter: blur(6px);
+  background: rgb(181, 181, 181);
+  filter: blur(3px);
   position: fixed;
   top: 0;
   left: 0;

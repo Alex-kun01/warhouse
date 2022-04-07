@@ -1,37 +1,20 @@
 <template>
   <div class="mainScene">
-    <div class="button">
-        <div class="input_box">
-          <input type="text" v-model="warLength" placeholder="仓库-长">
-          <input type="text" v-model="warWidth" placeholder="仓库-宽">
-          <input type="text" v-model="warHeight" placeholder="仓库-高">
-        </div>
-        <div>
-          <button @click="createWar">创建</button>
-          <button @click="deleteWar">销毁</button>
-        </div>
-    </div>
-    <div class="button two">
-        <div class="input_box">
-          <input type="text" v-model="boxLength" placeholder="箱子-长">
-          <input type="text" v-model="boxWidth" placeholder="箱子-宽">
-          <input type="text" v-model="boxHeight" placeholder="箱子-高">
-          <input type="text" v-model="positionX" placeholder="箱子-距离仓库X轴距离">
-          <input type="text" v-model="positionY" placeholder="箱子-距离仓库Y轴距离">
-          <input type="text" v-model="positionZ" placeholder="箱子-距离仓库Z轴距离">
-        </div>
-        <div>
-          <button @click="createBox" class="btn2">创建</button>
-        </div>
-    </div>
     <div id="scene_main"></div>
+    <WarList />
+    <ThingList />
+    <FangAn />
   </div>
 </template>
 <script>
 import Scene from '@/utils/scene.js';
+import WarList from '../components/WarList.vue';
+import ThingList from '../components/ThingList.vue';
+import FangAn from '../components/FangAn.vue';
 
 export default {
   name: 'mainScene',
+  components: { WarList, ThingList, FangAn },
   data: () => {
       return {
         scene: null,
