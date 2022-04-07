@@ -2,7 +2,7 @@
   <div class="basex_ui_login_wraper">
     <div class="login_content">
       <div class="title_box">
-        <div class="title">BaseX-<span>UI</span></div>
+        <div class="title">仓库管理</div>
         <div class="tip">Vue3 + 可视化大屏组件库</div>
       </div>
       <div class="input_box">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="login_info">
-      A Set of southwest Licensed | Copyright © 2022 by UINO
+      A Set of southwest Licensed | Copyright © 2022 by CANGKU
     </div>
   </div>
 </template>
@@ -124,6 +124,7 @@ export default {
       border-radius: 10px;
       box-sizing: border-box;
       padding: 27px 71px 45px 71px;
+      box-shadow: 5px 5px 10px 10px rgba(0, 0, 0, .2);
 
       .top_tip {
         width: 100%;
@@ -154,6 +155,7 @@ export default {
       .input_item {
         width: 300px;
         height: 36px;
+        line-height: 35px;
         border-radius: 4px;
         border: 1px solid #e5e5e5;
         margin-bottom: 40px;
@@ -222,9 +224,9 @@ export default {
         }
 
         input {
-          height: 32px;
+          height: 28px;
           width: 92%;
-          line-height: 32px;
+          line-height: 28px;
           border: none;
           outline: none;
           font-family: Microsoft YaHei;

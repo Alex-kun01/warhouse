@@ -1,16 +1,19 @@
 <template>
   <div class="home">
-  <MainScene />
+    <MainScene />
+    <DateTime />
   </div>
 </template>
 
 <script>
 import MainScene from './scene/MainScene.vue'
+import DateTime from './components/DateTime.vue'
 
 export default {
   name: 'Home',
   components: {
-    MainScene
+    MainScene,
+    DateTime
   }
 }
 </script>
