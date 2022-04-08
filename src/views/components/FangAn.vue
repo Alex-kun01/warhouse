@@ -104,7 +104,6 @@ export default {
         const res = await axios.get('/mock/fangan.json');
         if (res.data.code === 200) {
         const data = res.data.data;
-        console.log('jzk res', data);
         $scene.createWarhouse('测试仓库',60, 60, 10);
         this.show = false;
         setTimeout(() => {

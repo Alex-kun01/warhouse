@@ -76,7 +76,6 @@ export default {
   methods:{
     thingUpdata() {
       this.things = this.$store.state.things;
-      console.log('jzk things', this.things)
       if (this.$store.state.things.length !== 0) this.thingShow = true;
       else this.thingShow = false;
     },
@@ -86,7 +85,6 @@ export default {
       else this.warShow = false;
     },
     deleteThing(item) {
-      console.log('jzk i', item)
       $scene.deleteBox(item.id)
     }
   }
