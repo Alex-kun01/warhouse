@@ -10,6 +10,9 @@ window.config = {
           length: 1000,
           width: 1000,
           height: 1000,
+          // 天空盒配置 可配参数如下 可自定义天空盒 路径 'static/images/skybox'
+          // BlueSky CloudySky Dark DarkBlue MilkyWay White Night Universal DeepAsh Grassland
+          skyBox: 'White',
         },
         // 相机配置
         carams: {

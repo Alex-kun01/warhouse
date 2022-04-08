@@ -1,9 +1,9 @@
-const right = require('../../public/static/images/skybox/右边.jpg');
-const left = require('../../public/static/images/skybox/左边.jpg');
-const top = require('../../public/static/images/skybox/顶部.jpg');
-const bottom = require('../../public/static/images/skybox/底部.jpg');
-const back = require('../../public/static/images/skybox/后边.jpg');
-const front = require('../../public/static/images/skybox/前边.jpg');
+const right = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/posx.jpg`);
+const left = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/negx.jpg`);
+const top = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/posy.jpg`);
+const bottom = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/negy.jpg`);
+const back = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/posz.jpg`);
+const front = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/negz.jpg`);
 const floorBg = require('../../public/static/images/floor.jpg');
 const boxBg = require('../../public/static/images/box.png');
 
@@ -21,6 +21,7 @@ export default class Scene {
         this.warLength = 60; // 仓库墙长
         this.orbitControls = null; // 控制器
         this.things = []; // 箱子对象数组
+        this.thingObj = null; // 单个箱子
         this.init();
         this.animate();
     }
@@ -125,8 +126,14 @@ export default class Scene {
      
      // 创建箱子
      createBox = (length, width, height, x, y, z) => {
+      //  未创建仓库时 直接创建箱子
+       if (this.warBoxs.length === 0) {
+         this.createBoxOntWar(length, width, height, x, y, z);
+        return;
+       }
        
-       if (!length || !width || !height || this.warBoxs.length === 0) return;
+      //  已经创建仓库时 创建箱子
+      if (!length || !width || !height || this.warBoxs.length === 0) return;
       const cubeGeo = new THREE.BoxBufferGeometry( width, height, length );
 			const cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( boxBg ) } );
       const voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
@@ -146,6 +153,15 @@ export default class Scene {
       this.things.push(voxel);
      }
 
+    //  无仓库创建箱子
+    createBoxOntWar = (length, width, height, x, y, z) => {
+      const geometry = new THREE.BoxGeometry( width, height, length );
+      const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+      const cube = new THREE.Mesh( geometry, material );
+      this.scene.add( cube );
+      this.thingObj = cube;
+    }
+
      // 销毁仓库
      removeWarhouse = () => {
          if (this.warBoxs.length !== 0) {
@@ -160,12 +176,17 @@ export default class Scene {
            })
          }
 
+         if (this.thingObj) {
+           this.scene.remove(this.thingObj);
+         }
+
          setTimeout(() => { 
           this.warBoxs = [];
           this.warHeight = 0;
           this.warLength = 0;
           this.warWidth = 0;
           this.floor = null;
+          this.thingObj = null;
           }, 0)
      }
     

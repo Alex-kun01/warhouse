@@ -134,7 +134,7 @@ export default {
         font-family: Microsoft YaHei;
         font-weight: 400;
         font-size: 14px;
-        color: #ff7f00;
+        color: #409EFF;
         position: relative;
         margin-bottom: 30px;
         text-align: center;
@@ -143,7 +143,7 @@ export default {
           content: "";
           width: 20px;
           height: 3px;
-          background: rgba(255, 127, 0, 1);
+          background: #409EFF;
           position: absolute;
           left: 0;
           right: 0;
@@ -319,7 +319,7 @@ export default {
         font-size: 14px;
         font-weight: 400;
         border-radius: 4px 4px 4px 4px;
-        background: rgba(255, 127, 0, 1);
+        background: #409EFF;
         cursor: pointer;
         margin-top: 30px;
 

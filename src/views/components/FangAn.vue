@@ -141,7 +141,7 @@ export default {
                 cursor: pointer;
 
                 &.active {
-                    background: #ff7f00;
+                    background: #409EFF;
                     color: #fff;
                 }
             }
@@ -166,6 +166,25 @@ export default {
                 justify-content: flex-start;
                 align-content: center;
                 overflow-y: auto;
+                
+                &::-webkit-scrollbar{
+                  width: 6px;
+                  height: 6px;
+                }
+                &::-webkit-scrollbar-track{
+                  background: rgb(232, 231, 231);
+                  border-radius: 2px;
+                }
+                &::-webkit-scrollbar-thumb{
+                  background: #bfbfbf;
+                  border-radius: 10px;
+                }
+                &::-webkit-scrollbar-thumb:hover{
+                  background: #bfbfbf;
+                }
+                &::-webkit-scrollbar-corner{
+                  background: #999;
+                }
 
                 .item {
                     width: 85px;
@@ -190,7 +209,7 @@ export default {
                 height: 30px;
                 line-height: 30px;
                 text-align: center;
-                background: #ff7f00;
+                background: #409EFF;
                 color: #fff;
                 border-radius: 8px;
                 cursor: pointer;
