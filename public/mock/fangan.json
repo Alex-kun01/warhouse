@@ -1,0 +1,247 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "name": "物体A",
+      "id": "war001",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 1,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(56,138,167)"
+    },
+    {
+      "name": "物体B",
+      "id": "war002",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 4,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(54,111,216)"
+    },
+    {
+      "name": "物体I",
+      "id": "war068",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 7,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(211,70,188)"
+    },
+    {
+      "name": "物体U",
+      "id": "war064",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 10,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(246,74,232)"
+    },
+    {
+      "name": "物体T",
+      "id": "war062",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 13,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(128,173,130)"
+    },
+    {
+      "name": "物体R",
+      "id": "war061",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 15,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(51,116,107)"
+    },
+    {
+      "name": "物体E",
+      "id": "war059",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 18,
+      "posY": 0,
+      "posZ": 0,
+      "color": "rgb(86,77,142)"
+    },
+    {
+      "name": "物体R",
+      "id": "war058",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 4,
+      "posY": 4,
+      "posZ": 0,
+      "color": "rgb(21,99,50)"
+    },
+    {
+      "name": "物体Q",
+      "id": "war057",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 4,
+      "posY": 4,
+      "posZ": 0,
+      "color": "rgb(118,70,32)"
+    },
+    {
+      "name": "物体L",
+      "id": "war056",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 4,
+      "posY": 8,
+      "posZ": 0,
+      "color": "rgb(147,232,159)"
+    },
+    {
+      "name": "物体K",
+      "id": "war055",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 4,
+      "posY": 12,
+      "posZ": 0,
+      "color": "rgb(83,103,43)"
+    },
+    {
+      "name": "物体J",
+      "id": "war054",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 12,
+      "posY": 8,
+      "posZ": 7,
+      "color": "rgb(188,18,225)"
+    },
+    {
+      "name": "物体H",
+      "id": "war053",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 18,
+      "posY": 19,
+      "posZ": 3,
+      "color": "rgb(228,14,129)"
+    },
+    {
+      "name": "物体G",
+      "id": "war052",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 20,
+      "posY": 10,
+      "posZ": 2,
+      "color": "rgb(5,209,233)"
+    },
+    {
+      "name": "物体F",
+      "id": "war052",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 20,
+      "posY": 20,
+      "posZ": 5,
+      "color": "rgb(145,6,251)"
+    },
+    {
+      "name": "物体F",
+      "id": "war050",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 30,
+      "posY": 27,
+      "posZ": 0,
+      "color": "rgb(188,220,41)"
+    },
+    {
+      "name": "物体S",
+      "id": "war049",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 28,
+      "posY": 24,
+      "posZ": 4,
+      "color": "rgb(209,42,62)"
+    },
+    {
+      "name": "物体V",
+      "id": "war048",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 15,
+      "posY": 24,
+      "posZ": 8,
+      "color": "rgb(74,121,136)"
+    },
+    {
+      "name": "物体N",
+      "id": "war047",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 24,
+      "posY": 31,
+      "posZ": 0,
+      "color": "rgb(254,203,169)"
+    },
+    {
+      "name": "物体M",
+      "id": "war046",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 18,
+      "posY": 24,
+      "posZ": 0,
+      "color": "rgb(119,87,59)"
+    },
+    {
+      "name": "物体Y",
+      "id": "war023",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 1,
+      "posY": 23,
+      "posZ": 6,
+      "color": "rgb(129,253,1)"
+    },
+    {
+      "name": "物体Z",
+      "id": "war045",
+      "width": 3,
+      "height": 3,
+      "length": 3,
+      "posX": 4,
+      "posY": 26,
+      "posZ": 15,
+      "color": "rgb(239,107,185)"
+    }
+  ]
+}

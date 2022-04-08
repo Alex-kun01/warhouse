@@ -8,6 +8,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="createWarClcik">创建仓库</el-dropdown-item>
             <el-dropdown-item @click.native="cteateThingClick">创建物体</el-dropdown-item>
+            <el-dropdown-item @click.native="clearScene">清空场景</el-dropdown-item>
             <el-dropdown-item  @click.native="loginOut">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -21,11 +22,8 @@ export default {
   name: 'warlist',
   data(){
       return {
-          show: true,
-          warList: []
+        show: true
       }
-  },
-  mounted(){
   },
   methods:{
     createWarClcik(){
@@ -35,6 +33,9 @@ export default {
     cteateThingClick() {
       this.$bus.$emit('controlThingDialog', true);
       if (window.$scene.warBoxs.length !== 0) return; 
+      window.$scene.removeWarhouse();
+    },
+    clearScene() {
       window.$scene.removeWarhouse();
     },
     loginOut(){

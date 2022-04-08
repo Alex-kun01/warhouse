@@ -6,7 +6,7 @@ const back = require(`../../public/static/images/skybox/${window.config.scenePar
 const front = require(`../../public/static/images/skybox/${window.config.sceneParams.scene.skyBox}/negz.jpg`);
 const floorBg = require('../../public/static/images/floor.jpg');
 const boxBg = require('../../public/static/images/box.png');
-
+import store from '../store';
 export default class Scene {
     constructor(targetDom) {
         this.target = targetDom;
@@ -21,7 +21,9 @@ export default class Scene {
         this.warLength = 60; // 仓库墙长
         this.orbitControls = null; // 控制器
         this.things = []; // 箱子对象数组
+        this.thingLines = []; // 箱子描边数组
         this.thingObj = null; // 单个箱子
+        this.lineBox = null; // 单个箱子描边
         this.init();
         this.animate();
     }
@@ -34,11 +36,12 @@ export default class Scene {
         this.initRenderer();
         this.openOrbitControls();
         this.createWallMaterail();
+        window.getRadomColor = this.getRadomColor;
     }
 
     // 初始化场景
     initScene = () => {
-        this.scene = new THREE.Scene(); 
+        this.scene = new THREE.Scene();
     }
 
     // 初始化相机
@@ -103,7 +106,7 @@ export default class Scene {
       * @param {*} height 高
       * @returns 
       */
-     createWarhouse = (length, width, height) => {
+     createWarhouse = (name,length, width, height) => {
         if (this.warBoxs.length !== 0) return;
         this.warHeight = height;
         this.warLength = length + 2;
@@ -122,21 +125,38 @@ export default class Scene {
         this.createCubeWall(1, this.warHeight, this.warLength, 0, this.matArrayB, clineX, clineZ, 0, "墙面-右");
         this.createCubeWall(1, this.warHeight, this.warWidth, 1.5, this.matArrayB, 0, clineZ, clineY, "墙面-前");
         this.createCubeWall(1, this.warHeight, this.warWidth, 1.5, this.matArrayB, 0, clineZ, -clineY, "墙面-后");
+        setTimeout(() => {
+          store.commit('setWarInfo', {
+            name,
+            width: this.warWidth,
+            height: this.warHeight,
+            length: this.warLength
+          })
+        },0)
      }
      
      // 创建箱子
-     createBox = (length, width, height, x, y, z) => {
+     createBox = (name,length, width, height, x, y, z) => {
       //  未创建仓库时 直接创建箱子
        if (this.warBoxs.length === 0) {
-         this.createBoxOntWar(length, width, height, x, y, z);
+         this.createBoxOntWar(name,length, width, height, x, y, z);
         return;
        }
-       
+       const uuid = this.getUuid();
       //  已经创建仓库时 创建箱子
       if (!length || !width || !height || this.warBoxs.length === 0) return;
-      const cubeGeo = new THREE.BoxBufferGeometry( width, height, length );
-			const cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( boxBg ) } );
-      const voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
+      // 使用图片加载箱子
+      // const cubeGeo = new THREE.BoxBufferGeometry( width, height, length );
+			// const cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( boxBg ) } );
+      // const voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
+      const color = this.getRadomColor();
+      const geometry1 = new THREE.BoxGeometry( width, height, length );
+      const material1 = new THREE.MeshBasicMaterial( {color} );
+      const box = new THREE.Mesh( geometry1, material1 );
+      // 箱子描边
+      const geometry = new THREE.BoxBufferGeometry(width, height, length);
+      const edges = new THREE.EdgesGeometry(geometry);
+      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0xffffff}));
       // 计算X轴原点
       const originX = this.warLength / 2 - (1 + length / 2);
       // 计算Y轴原点
@@ -147,19 +167,71 @@ export default class Scene {
       const positionX = originX - x;
       const positionY = originY + y;
       const positionZ = originZ + z;
-      voxel.position.set(positionY,positionZ,positionX);
-      voxel.name = "货物1";
-      this.scene.add( voxel );
-      this.things.push(voxel);
+      box.position.set(positionY,positionZ,positionX);
+      line.position.set(positionY,positionZ,positionX);
+      box.name = `${name}`;
+      box.uuidx = uuid;
+      line.name = `${name}-描边`;
+      line.uuidx = uuid;
+      this.scene.add( box );
+      this.scene.add( line );
+      this.things.push(box);
+      this.thingLines.push(line);
+      this.storeBoxCreate(name,length, width, height, x, y, z, color, uuid);
      }
 
     //  无仓库创建箱子
-    createBoxOntWar = (length, width, height, x, y, z) => {
-      const geometry = new THREE.BoxGeometry( width, height, length );
-      const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-      const cube = new THREE.Mesh( geometry, material );
-      this.scene.add( cube );
-      this.thingObj = cube;
+    createBoxOntWar = (name,length, width, height, x, y, z) => {
+      const uuid = this.getUuid();
+      const color = this.getRadomColor();
+      const geometry1 = new THREE.BoxGeometry( width, height, length );
+      const material1 = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+      const box = new THREE.Mesh( geometry1, material1 );
+      // 箱子描边
+      const geometry = new THREE.BoxBufferGeometry(width, height, length);
+      const edges = new THREE.EdgesGeometry(geometry);
+      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color}));
+      box.name = name;
+      box.uuidx = uuid;
+      line.name =`${name}-描边`;
+      line.uuidx = uuid;
+      this.scene.add( box );
+      this.scene.add(line);
+      this.thingObj = box;
+      this.lineBox = line;
+      this.storeBoxCreate(name,length, width, height, x, y, z, color,uuid);
+    }
+
+    // 记录箱子创建
+    storeBoxCreate = (name,length, width, height, x, y, z, color, uuid) => {
+      const things = store.state.things;
+      const newList = [...things];
+      const item = {
+        name,
+        id: uuid,
+        width,
+        height,
+        length,
+        posX: x,
+        posY: y,
+        posZ: z,
+        color,
+      };
+      newList.push(item);
+      store.commit('setThings', newList);
+    }
+
+    // 删除指定id的箱子
+    deleteBox = (id) => {
+      const targetThing = this.things.filter(item => item.uuidx === id);
+      const newThings = this.things.filter(item => item.uuidx !== id);
+      this.things = newThings;
+      const targetLine = this.thingLines.filter(item => item.uuidx === id);
+      const newLises = this.thingLines.filter(item => item.uuidx !== id);
+      this.thingLines = newLises;
+      // 此处删除箱子重新请求接口刷新vuex数据
+      if (targetThing[0]) this.scene.remove(targetThing[0]);
+      if (targetLine[0]) this.scene.remove(targetLine[0]);
     }
 
      // 销毁仓库
@@ -180,6 +252,16 @@ export default class Scene {
            this.scene.remove(this.thingObj);
          }
 
+         if (this.lineBox) {
+           this.scene.remove(this.lineBox);
+         }
+
+         if (this.thingLines.length !== 0) {
+           this.thingLines.forEach(thing => {
+            this.scene.remove(thing);
+           })
+         }
+
          setTimeout(() => { 
           this.warBoxs = [];
           this.warHeight = 0;
@@ -187,6 +269,9 @@ export default class Scene {
           this.warWidth = 0;
           this.floor = null;
           this.thingObj = null;
+          this.lineBox = null;
+          store.commit('setWarInfo', {});
+          store.commit('setThings', []);
           }, 0)
      }
     
@@ -249,6 +334,34 @@ export default class Scene {
         // 启用或禁用摄像机平移
         this.orbitControls.enablePan = window.config.sceneParams.carams.enablePan;
     }
+
+    // 获取随机数
+    getRadomNumber = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    // 获取随机颜色
+    getRadomColor = () => {
+      return `rgb(${this.getRadomNumber(0,255)},${this.getRadomNumber(0,255)},${this.getRadomNumber(0,255)})`
+    }
+
+    // 获取0x开头的随机颜色
+    getOxRadomColor = () => {
+      return this.colorZh(this.getRadomColor()).replace('#', '0x')
+    }
+    
+    // 颜色转换
+    colorZh = (sRGB) => {
+      return sRGB.replace(/^rgb\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)$/,function($0,$1,$2,$3){
+          return '#'+('0'+(+$1).toString(16)).slice(-2)+('0'+(+$2).toString(16)).slice(-2)+('0'+(+$3).toString(16)).slice(-2);
+        });
+    }
+
+    // 获取唯一id
+    getUuid = () => {
+      return (Math.random() + '').substr(3,8) + Date.now().toString(32);
+    }
+  
 
      animate = () => {
         requestAnimationFrame(this.animate);

@@ -44,10 +44,8 @@ export default {
 .warlist {
     width: 200px;
     min-height: 30px;
-    position: absolute;
-    top: 10px;
-    left: 220px;
     border-radius: 8px;
+    margin-right: 10px;
     overflow: hidden;
 
     .title {

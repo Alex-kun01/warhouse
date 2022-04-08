@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="btn_box">
-            <div class="btn">计算</div>
+            <div class="btn" @click="calculate">计算</div>
         </div>
     </div>
   </div>
@@ -38,7 +38,7 @@ export default {
   name: 'warlist',
   data(){
       return {
-          show: true,
+          show: false,
           // 方案激活
           fanganIndex: 0,
           //仓库列表
@@ -99,6 +99,21 @@ export default {
               this.$bus.$emit('openLoading', false);
           }, 1000)
       },
+      // 计算
+      async calculate() {
+        const res = await axios.get('/mock/fangan.json');
+        if (res.data.code === 200) {
+        const data = res.data.data;
+        console.log('jzk res', data);
+        $scene.createWarhouse('测试仓库',60, 60, 10);
+        this.show = false;
+        setTimeout(() => {
+          data.forEach(item => {
+            $scene.createBox(item.name,+item.length, +item.width, +item.height, +item.posX, +item.posY, +item.posZ );
+          });
+        }, 1500)
+        }
+      }
   }
 }
 </script>
@@ -106,10 +121,8 @@ export default {
 .warlist {
     width: 240px;
     min-height: 30px;
-    position: absolute;
-    top: 10px;
-    left: 430px;
     border-radius: 8px;
+    margin-right: 10px;
     overflow: hidden;
 
     .title {

@@ -2,26 +2,26 @@
     "code": 200,
     "data": [
         {
-            "name": "物体A",
-            "id": "war001",
-            "width": 30,
-            "height": 10,
-            "length": 60,
-            "posX": 1,
-            "posY": 1,
-            "posZ": 1,
-            "color": "#008c8c"
-          },
-          {
-            "name": "物体B",
-            "id": "war001",
-            "width": 30,
-            "height": 10,
-            "length": 60,
-            "posX": 1,
-            "posY": 1,
-            "posZ": 1,
-            "color": "#008c8c"
-          }
+        "name": "物体A",
+        "id": "war001",
+        "width": 30,
+        "height": 10,
+        "length": 60,
+        "posX": 1,
+        "posY": 1,
+        "posZ": 1,
+        "color": "#008c8c"
+      },
+      {
+        "name": "物体B",
+        "id": "war001",
+        "width": 30,
+        "height": 10,
+        "length": 60,
+        "posX": 1,
+        "posY": 1,
+        "posZ": 1,
+        "color": "#008c8c"
+      }
     ]
 }

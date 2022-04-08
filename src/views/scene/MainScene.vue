@@ -1,11 +1,13 @@
 <template>
   <div class="mainScene">
     <div id="scene_main"></div>
-    <WarList />
-    <ThingList />
-    <FangAn />
-    <Control />
-    <NowWarinfo />
+    <div class="box_x">
+      <WarList />
+      <ThingList />
+      <FangAn />
+      <Control />
+      <NowWarinfo />
+    </div>
   </div>
 </template>
 <script>
@@ -46,6 +48,16 @@ export default {
     height: 100%;
     position: relative;
     overflow: hidden;
+
+    .box_x {
+      width: 100%;
+      pointer-events: all;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: flex-start;
+    }
     .button {
         width: 200px;
         height: 150px;

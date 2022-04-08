@@ -25,7 +25,7 @@
       </div>
   </el-dialog>
   <!-- 物体 -->
-  <el-dialog title="创建仓库" width="25%" :visible.sync="dialogThingVisible">
+  <el-dialog title="创建物体" width="25%" :visible.sync="dialogThingVisible">
       <el-form :model="thingForm">
         <el-form-item label="物体名称" :label-width="formLabelWidth">
           <el-input v-model="thingForm.name" autocomplete="off"></el-input>
@@ -113,7 +113,7 @@ export default {
       if (!width) return this.$message({ type: 'warning', message: '请输入仓库宽度！' });
       if (!height) return this.$message({ type: 'warning', message: '请输入仓库高度！' });
       if (!length) return this.$message({ type: 'warning', message: '请输入仓库长度！' });
-      window.$scene && window.$scene.createWarhouse(+length, +width, +height);
+      window.$scene && window.$scene.createWarhouse(name,+length, +width, +height);
       this.dialogFormVisible = false;
     },
     subThingCreate(){
@@ -122,7 +122,7 @@ export default {
       if (!width) return this.$message({ type: 'warning', message: '请输入仓库宽度！' });
       if (!height) return this.$message({ type: 'warning', message: '请输入仓库高度！' });
       if (!length) return this.$message({ type: 'warning', message: '请输入仓库长度！' });
-      window.$scene && window.$scene.createBox(+length, +width, +height, +posX, +posY, +posZ );
+      window.$scene && window.$scene.createBox(name,+length, +width, +height, +posX, +posY, +posZ );
       this.dialogThingVisible = false;
     }
   },
