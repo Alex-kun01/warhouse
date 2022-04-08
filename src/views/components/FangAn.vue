@@ -86,7 +86,6 @@ export default {
       }
   },
   mounted(){
-      this.getData();
       this.$off('addList');
       this.$on('addList', (type, item) => {
         if (type === 'war') this.warList.push(item);
