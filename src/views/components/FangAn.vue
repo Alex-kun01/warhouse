@@ -8,19 +8,21 @@
             @click="fanganIndex = index"
             v-for="(item,index) in ['仓库 >> 物体', '物体 >> 仓库']" :key="index">{{item}}</div>
         </div>
-            <div>仓库</div>
+            <div class="sf_title">仓库</div>
         <div class="option">
             <div class="fang warer">
                 <div class="item" v-for="(thing, ix) in warList" :key="ix">
                     <span>{{thing.name}}</span>
+                    <i @click="deleteWar(thing)" class="el-icon-close"></i>
                 </div>
             </div>
         </div>
-        <div>物体</div>
+        <div class="sf_title">物体</div>
         <div class="option">
             <div class="fang thing">
                 <div class="item" v-for="(thing, ix) in thingList" :key="ix">
                     <span>{{thing.name}}</span>
+                    <i @click="deleteThing(thing)" class="el-icon-close"></i>
                 </div>
             </div>
         </div>
@@ -42,47 +44,9 @@ export default {
           // 方案激活
           fanganIndex: 0,
           //仓库列表
-          warList: [
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              }
-          ],
+          warList: [],
           //物体列表
-          thingList: [
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              },
-              {
-                  name: "物体A"
-              }
-          ],
+          thingList: [],
       }
   },
   mounted(){
@@ -91,13 +55,29 @@ export default {
         if (type === 'war') this.warList.push(item);
         if (type === 'thing') this.thingList.push(item);
       })
+      this.sfThingUpdata();
+      this.sfWarUpdata();
   }, 
+  watch: {
+      '$store.state.sfWarList': 'sfWarUpdata',
+      '$store.state.sfThingList': 'sfThingUpdata'
+  },
   methods:{
       openloading() {
           this.$bus.$emit('openLoading', true);
           setTimeout(() => {
               this.$bus.$emit('openLoading', false);
           }, 1000)
+      },
+      deleteWar(item) {
+          const newList = this.warList.filter(option => option.id !== item.id);
+          this.warList = newList;
+          this.$store.commit('setSfWarList', newList);
+      },
+      deleteThing(item) {
+          const newList = this.thingList.filter(option => option.id !== item.id);
+          this.thingList = newList;
+          this.$store.commit('setSfThingList', newList);
       },
       // 计算
       async calculate() {
@@ -112,13 +92,19 @@ export default {
           });
         }, 1500)
         }
+      },
+      sfThingUpdata() {
+          this.thingList = this.$store.state.sfThingList;
+      },
+      sfWarUpdata() {
+         this.warList = this.$store.state.sfWarList; 
       }
   }
 }
 </script>
 <style lang="less" scoped>
 .warlist {
-    width: 240px;
+    width: 290px;
     min-height: 30px;
     border-radius: 8px;
     margin-right: 10px;
@@ -159,12 +145,19 @@ export default {
             }
         }
 
+        .sf_title {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
         .option {
             width: 100%;
             height: 100px;
-            background: rgb(247, 255, 170);
+            background: antiquewhite;
             overflow: hidden;
             margin-bottom: 10px;
+            box-sizing: border-box;
+            padding-top: 6px;
 
             .fang {
                 width: 100%;
@@ -176,7 +169,7 @@ export default {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: flex-start;
-                align-content: center;
+                align-content: flex-start;
                 overflow-y: auto;
                 
                 &::-webkit-scrollbar{
@@ -199,12 +192,32 @@ export default {
                 }
 
                 .item {
-                    width: 85px;
-                    background: #EEE;
+                    width: 116px;
+                    background: #fff;
                     border-radius: 4px;
-                    padding: 2px 4px;
-                    margin-right: 10px;
-                    margin-bottom: 10px;
+                    padding: 2px 2px 2px 6px;
+                    margin: 0 10px 5px 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    cursor: pointer;
+
+                    i {
+                        font-weight: 600;
+
+                        &:hover {
+                            color: red;
+                        }
+                    }
+
+                    span {
+                        &:nth-of-type(1) {
+                            width: 80px;
+                            overflow: hidden;
+                            text-overflow:ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
                 }
             }
         }

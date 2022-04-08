@@ -22,6 +22,17 @@
         "posY": 1,
         "posZ": 1,
         "color": "#008c8c"
+      },
+      {
+        "name": "物体C",
+        "id": "war001",
+        "width": 30,
+        "height": 10,
+        "length": 60,
+        "posX": 1,
+        "posY": 1,
+        "posZ": 1,
+        "color": "#008c8c"
       }
     ]
 }

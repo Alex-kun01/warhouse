@@ -32,7 +32,7 @@
             <span>{{item.posX}}</span>
             <span>{{item.posY}}</span>
             <span>{{item.posZ}}</span>
-            <span><i @click="deleteThing(item)" class="el-icon-circle-close"></i></span>
+            <span><i @click="deleteThing(item)" class="el-icon-delete"></i></span>
           </div>
         </div>
       </div>
@@ -154,12 +154,18 @@ export default {
         .titles {
           display: flex;
           align-items: center;
+          box-sizing: border-box;
+          padding: 0 0 0 5px;
+          background: #bfbfbf;
+          margin-right: 6px;
+          font-weight: 600;
 
           span {
-            text-align: center;
             flex: 1;
+            text-align: left;
             &:nth-of-type(2) {
               flex: 3;
+              padding-left: 4px;
             }
           }
         }
@@ -179,7 +185,6 @@ export default {
           width: 100%;
           height: 200px;
           box-sizing: border-box;
-          padding-right: 10px;
           overflow-y: auto;
 
           &::-webkit-scrollbar{
@@ -205,7 +210,6 @@ export default {
             height: 24px;
             line-height: 24px;
             box-sizing: border-box;
-            padding: 0 10px;
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -213,7 +217,10 @@ export default {
             background-color: #ddd;
 
               span {
+                color: #000;
+                font-size: 16px;
                 flex: 1;
+                text-align: left;
                 &:nth-of-type(2) {
                   flex: 3;
                 }

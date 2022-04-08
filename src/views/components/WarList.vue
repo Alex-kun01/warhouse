@@ -1,10 +1,13 @@
 <template>
   <div class="warlist">
-    <div class="title" @click.self="show = !show">仓库列表</div>
+    <div class="title" @click.self="show = !show && warList.length !== 0">仓库列表</div>
     <div class="list_box" v-show="show">
         <div class="item" v-for="(item,index) in warList" :key="index">
             <p>{{item.name}}</p>
-            <p>123</p>
+            <p>
+                <i class="el-icon-circle-plus-outline" @click="addSfList(item)"></i>
+                <i class="el-icon-delete" @click="deleteSfList(item)"></i>
+            </p>
         </div>
     </div>
   </div>
@@ -25,6 +28,14 @@ export default {
       this.getData();
   },
   methods:{
+      addSfList(item) {
+          const newList = this.$store.state.sfThingList;
+          newList.push(item);
+          this.$store.commit('setSfWarList', newList);
+      },
+      deleteSfList(item){
+          console.log('删除', item);
+      },
       openloading() {
           this.$bus.$emit('openLoading', true);
           setTimeout(() => {
@@ -77,7 +88,7 @@ export default {
             }
 
             &:hover {
-                background: rgb(248, 246, 175);
+                background: rgb(213, 213, 213);
                 font-weight: 600;
                 border-radius: 4px;
             }
@@ -88,9 +99,30 @@ export default {
 
                 &:nth-of-type(1) {
                     width: 120px;
+                    overflow: hidden;
+                    text-overflow:ellipsis;
+                    white-space: nowrap;
                 }
+
                 &:nth-of-type(2) {
                     width: 70px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-around;
+
+                    i {
+                        &:nth-of-type(1) {
+                            &:hover {
+                                color: #409EFF;
+                            }
+                        }
+
+                        &:nth-of-type(2) {
+                            &:hover {
+                                color: red;
+                            }
+                        }
+                    }
                 }
             }
         }

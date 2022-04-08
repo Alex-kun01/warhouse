@@ -3,12 +3,13 @@
     <div class="content" v-show="show">
         <el-dropdown>
           <el-button type="primary" size="medium">
-            更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
+            admin<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="createWarClcik">创建仓库</el-dropdown-item>
             <el-dropdown-item @click.native="cteateThingClick">创建物体</el-dropdown-item>
             <el-dropdown-item @click.native="clearScene">清空场景</el-dropdown-item>
+            <el-dropdown-item @click.native="printScene">打印场景</el-dropdown-item>
             <el-dropdown-item  @click.native="loginOut">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -41,6 +42,9 @@ export default {
     loginOut(){
       window.$scene.removeWarhouse();
       this.$router.replace('/')
+    },
+    printScene() {
+      console.log('jzk 打印场景')
     }
   }
 }
