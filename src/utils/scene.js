@@ -88,7 +88,8 @@ export default class Scene {
      // 初始化渲染器
      initRenderer = () => {
         this.renderer = new THREE.WebGLRenderer({
-          antialias: true
+          antialias: true,
+          preserveDrawingBuffer: true,
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(0x4682B4, 1.0);
@@ -345,12 +346,12 @@ export default class Scene {
       return `rgb(${this.getRadomNumber(0,255)},${this.getRadomNumber(0,255)},${this.getRadomNumber(0,255)})`
     }
 
-    // 获取0x开头的随机颜色
+    // 获取0x开头的随机颜色 #00ff00 => 0x00ff00
     getOxRadomColor = () => {
       return this.colorZh(this.getRadomColor()).replace('#', '0x')
     }
     
-    // 颜色转换
+    // 颜色转换 rgb => reutrn #00ff00
     colorZh = (sRGB) => {
       return sRGB.replace(/^rgb\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)$/,function($0,$1,$2,$3){
           return '#'+('0'+(+$1).toString(16)).slice(-2)+('0'+(+$2).toString(16)).slice(-2)+('0'+(+$3).toString(16)).slice(-2);
@@ -360,6 +361,15 @@ export default class Scene {
     // 获取唯一id
     getUuid = () => {
       return (Math.random() + '').substr(3,8) + Date.now().toString(32);
+    }
+
+    // 将当前视角保存为图片
+    cancasDownLoad = () => {
+      const canvas = this.renderer.domElement;
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = store.state.warInfo.name;
+      link.click();
     }
   
 

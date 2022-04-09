@@ -51,7 +51,7 @@ export default {
 
     .box_x {
       width: 100%;
-      pointer-events: all;
+      pointer-events: none;
       position: absolute;
       top: 0;
       left: 0;

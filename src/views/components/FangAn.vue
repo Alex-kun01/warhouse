@@ -81,16 +81,25 @@ export default {
       },
       // 计算
       async calculate() {
+        const { sfWarList, sfThingList } = this.$store.state;
+        if (sfThingList.length === 0) return this.$message({ type: 'warning', message: '请选择物体！' });
+        if (sfWarList.length === 0) return this.$message({ type: 'warning', message: '请选择仓库！' });
+        this.$store.commit('setLoading', true);
+        $scene.removeWarhouse();
         const res = await axios.get('/mock/fangan.json');
         if (res.data.code === 200) {
-        const data = res.data.data;
-        $scene.createWarhouse('测试仓库',60, 60, 10);
-        this.show = false;
-        setTimeout(() => {
-          data.forEach(item => {
-            $scene.createBox(item.name,+item.length, +item.width, +item.height, +item.posX, +item.posY, +item.posZ );
-          });
-        }, 1500)
+          const data = res.data.data;
+          setTimeout(() => {
+            $scene.createWarhouse('测试仓库',60, 60, 10);
+            this.show = false;
+            setTimeout(() => {
+              data.forEach(item => {
+                $scene.createBox(item.name,+item.length, +item.width, +item.height, +item.posX, +item.posY, +item.posZ );
+              });
+              this.$store.commit('setLoading', false);
+            }, 1000)
+          }, 1000);
+          
         }
       },
       sfThingUpdata() {
@@ -109,11 +118,13 @@ export default {
     border-radius: 8px;
     margin-right: 10px;
     overflow: hidden;
+    pointer-events: all;
 
     .title {
         width: 100%;
-        height: 30px;
-        line-height: 30px;
+        height: 24px;
+        font-size: 14px;
+        line-height: 24px;
         text-align: center;
         background: rgb(168, 168, 168);
         font-weight: 600;

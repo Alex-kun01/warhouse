@@ -1,6 +1,6 @@
 <template>
   <div class="warlist">
-    <div class="text">Loading...</div>
+    <div class="text">加载中</div>
     <div class="content"></div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -37,20 +37,19 @@ export default {
         background-image: url('../../assets/loading_middle_wheel.png');
         background-size: 100%;
         animation: 20s identifier infinite;
-
     }
 
     .text {
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
         color: #fff;
         font-size: 18px;
-        line-height: 900px;
         text-align: center;
         position: absolute;
-        top: 95px;
-        left: 15px;
-        right: 0;
-        bottom: 0;
-        margin: auto;
+        top: calc(50% - 50px);
+        left: calc(50% - 50px);
+        opacity: 0.2;
     }
     @keyframes identifier {
         0% {

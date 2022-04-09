@@ -102,11 +102,13 @@ export default {
     border-radius: 8px;
     margin-right: 10px;
     overflow: hidden;
+    pointer-events: all;
 
     .title {
         width: 100%;
-        height: 30px;
-        line-height: 30px;
+        height: 24px;
+        font-size: 14px;
+        line-height: 24px;
         text-align: center;
         background: rgb(168, 168, 168);
         font-weight: 600;

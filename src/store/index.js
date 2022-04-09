@@ -11,35 +11,10 @@ export default new Vuex.Store({
       // 当前物体信息
       things: [],
       // 算法-仓库
-      sfWarList: [
-        {
-          name: '仓库A',
-          id: '123'
-        },
-        {
-          name: '仓库B',
-          id: '122'
-        },
-        {
-          name: '仓库C',
-          id: '121'
-        }
-      ],
+      sfWarList: [],
       // 算法-物体
-      sfThingList: [
-        {
-          name: '物体A物体A物体A',
-          id: '121'
-        },
-        {
-          name: '物体B',
-          id: '122'
-        },
-        {
-          name: '物体C',
-          id: '123'
-        }
-      ],
+      sfThingList: [],
+      loading: false,
     },
     mutations: {
       setWarInfo: (state, data) => {
@@ -53,6 +28,9 @@ export default new Vuex.Store({
       },
       setSfThingList: (state, data) => {
         state.sfThingList = data;
-      } 
+      },
+      setLoading: (state, data) => {
+        state.loading = data;
+      }
     }
 });

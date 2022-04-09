@@ -44,7 +44,7 @@ export default {
       this.$router.replace('/')
     },
     printScene() {
-      console.log('jzk 打印场景')
+      $scene.cancasDownLoad();
     }
   }
 }

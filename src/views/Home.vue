@@ -2,7 +2,7 @@
   <div class="home">
     <MainScene />
     <!-- <DateTime /> -->
-    <Loding v-if="show" />
+    <Loding v-if="$store.state.loading" />
     <!-- 仓库 -->
     <el-dialog title="创建仓库" width="25%" :visible.sync="dialogFormVisible">
       <el-form :model="warForm">
@@ -39,7 +39,7 @@
         <el-form-item label="物体高度" :label-width="formLabelWidth">
           <el-input v-model="thingForm.height" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="物体X轴" :label-width="formLabelWidth">
+        <!-- <el-form-item label="物体X轴" :label-width="formLabelWidth">
           <el-input v-model="thingForm.posX" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="物体Y轴" :label-width="formLabelWidth">
@@ -47,7 +47,7 @@
         </el-form-item>
         <el-form-item label="物体Z轴" :label-width="formLabelWidth">
           <el-input v-model="thingForm.posZ" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogThingVisible = false">取 消</el-button>
@@ -118,18 +118,13 @@ export default {
     },
     subThingCreate(){
       const { name, width, height, length, posX, posY, posZ} = this.thingForm;
-      if (!name) return this.$message({ type: 'warning', message: '请输入仓库名称！' });
-      if (!width) return this.$message({ type: 'warning', message: '请输入仓库宽度！' });
-      if (!height) return this.$message({ type: 'warning', message: '请输入仓库高度！' });
-      if (!length) return this.$message({ type: 'warning', message: '请输入仓库长度！' });
+      if (!name) return this.$message({ type: 'warning', message: '请输入物体名称！' });
+      if (!width) return this.$message({ type: 'warning', message: '请输入物体宽度！' });
+      if (!height) return this.$message({ type: 'warning', message: '请输入物体高度！' });
+      if (!length) return this.$message({ type: 'warning', message: '请输入物体长度！' });
       window.$scene && window.$scene.createBox(name,+length, +width, +height, +posX, +posY, +posZ );
       this.dialogThingVisible = false;
     }
   },
 }
 </script>
-<style>
-.home {
-  
-}
-</style>
