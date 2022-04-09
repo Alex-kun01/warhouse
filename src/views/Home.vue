@@ -83,7 +83,7 @@ export default {
         length: 60,
       },
       thingForm: {
-        name: '测试仓库',
+        name: '测试物体',
         width: 30,
         height: 10,
         length: 60,

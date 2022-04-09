@@ -14,6 +14,10 @@ window.config = {
           // BlueSky CloudySky Dark DarkBlue MilkyWay White Night Universal DeepAsh Grassland
           skyBox: 'White',
         },
+        warOpts: {
+          // 仓库墙体透明度配置0-1
+          opacity: 0.4
+        },
         // 相机配置
         carams: {
             // 控制鼠标上垂直旋转的角度上限 区间【0-Math.PI(3.14)】

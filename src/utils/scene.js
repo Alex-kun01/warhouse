@@ -186,12 +186,12 @@ export default class Scene {
       const uuid = this.getUuid();
       const color = this.getRadomColor();
       const geometry1 = new THREE.BoxGeometry( width, height, length );
-      const material1 = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+      const material1 = new THREE.MeshBasicMaterial( {color} );
       const box = new THREE.Mesh( geometry1, material1 );
       // 箱子描边
       const geometry = new THREE.BoxBufferGeometry(width, height, length);
       const edges = new THREE.EdgesGeometry(geometry);
-      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color}));
+      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0xffffff}));
       box.name = name;
       box.uuidx = uuid;
       line.name =`${name}-描边`;
@@ -224,6 +224,14 @@ export default class Scene {
 
     // 删除指定id的箱子
     deleteBox = (id) => {
+      if (this.things.length === 0) {
+        this.scene.remove(this.thingObj);
+        this.scene.remove(this.lineBox);
+        this.thingObj = null;
+        this.lineBox = null;
+        store.commit('setThings', []);
+        return;
+      }
       const targetThing = this.things.filter(item => item.uuidx === id);
       const newThings = this.things.filter(item => item.uuidx !== id);
       this.things = newThings;
@@ -297,17 +305,17 @@ export default class Scene {
 
       // 创建墙体纹理
       createWallMaterail = () => {
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca}));  //前  0xafc0ca :灰色
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0x9cb2d1}));  //后  0x9cb2d1：淡紫
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec}));  //上  0xd6e4ec： 偏白色
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec}));  //下
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca}));  //左   0xafc0ca :灰色
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca}));  //右
+        const opacity = window.config.sceneParams.warOpts.opacity;
+        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //前  0xafc0ca :灰色
+        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0x9cb2d1, opacity, transparent:true }));  //后  0x9cb2d1：淡紫
+        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec, opacity, transparent:true }));  //上  0xd6e4ec： 偏白色
+        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec, opacity, transparent:true }));  //下
+        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //左   0xafc0ca :灰色
+        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //右
       }
       
       // 创建墙体 this.createCubeWall(10, 200, 2600, 1.5, this.matArrayB, 0, 100, -700, "墙面");
       createCubeWall = (width, height, depth, angle, material, x, y, z, name) => {
-        console.log('jzk ', width, height, depth)
         const cubeGeometry = new THREE.BoxGeometry(width, height, depth);
         const cube = new THREE.Mesh(cubeGeometry, material);
         cube.position.x = x;
