@@ -9,10 +9,10 @@ const boxBg = require('../../public/static/images/box.png');
 import store from '../store';
 export default class Scene {
     constructor(targetDom) {
-        this.target = targetDom;
-        this.scene = null;
-        this.camera = null;
-        this.renderer = null;
+        this.target = targetDom; // 目标渲染dom
+        this.scene = null; // 场景实例
+        this.camera = null; // 相机实例
+        this.renderer = null; // 渲染器实例
         this.matArrayB = []; // 外墙
         this.floor = null; // 地板
         this.warBoxs = []; // 仓库的墙体数组
@@ -36,7 +36,6 @@ export default class Scene {
         this.initRenderer();
         this.openOrbitControls();
         this.createWallMaterail();
-        window.getRadomColor = this.getRadomColor;
     }
 
     // 初始化场景
@@ -68,7 +67,6 @@ export default class Scene {
         const urls = [right,left,top,bottom,back,front];
          const skyboxCubemap = new THREE.CubeTextureLoader().load( urls );
          skyboxCubemap.format = THREE.RGBFormat;
- 
          const skyboxShader = THREE.ShaderLib['cube'];
          skyboxShader.uniforms['tCube'].value = skyboxCubemap;
          const { length, width, height } = window.config.sceneParams.scene;
@@ -120,8 +118,6 @@ export default class Scene {
         const clineZ = this.warHeight / 2;
         // 创建地板
         this.createFloor();
-        //                  宽  高  长                    左  高  前
-        // this.createCubeWall(1, 10, 60, 0, this.matArrayB, -14.5, 5, 0, "test");
         this.createCubeWall(1, this.warHeight, this.warLength, 0, this.matArrayB, -clineX, clineZ, 0, "墙面-左");
         this.createCubeWall(1, this.warHeight, this.warLength, 0, this.matArrayB, clineX, clineZ, 0, "墙面-右");
         this.createCubeWall(1, this.warHeight, this.warWidth, 1.5, this.matArrayB, 0, clineZ, clineY, "墙面-前");
@@ -137,7 +133,7 @@ export default class Scene {
      }
      
      // 创建箱子
-     createBox = (name,length, width, height, x, y, z) => {
+     createBox = (name,length, width, height, x = 0, y = 0, z = 0) => {
       //  未创建仓库时 直接创建箱子
        if (this.warBoxs.length === 0) {
          this.createBoxOntWar(name,length, width, height, x, y, z);
@@ -245,26 +241,27 @@ export default class Scene {
 
      // 销毁仓库
      removeWarhouse = () => {
+          // 销毁仓库列表
          if (this.warBoxs.length !== 0) {
            this.warBoxs.forEach(thing => {
             this.scene.remove(thing);
            })
          };
-
+          // 销毁物体列表
          if (this.things.length !== 0) {
           this.things.forEach(thing => {
             this.scene.remove(thing);
            })
          }
-
+          // 销毁单个物体
          if (this.thingObj) {
            this.scene.remove(this.thingObj);
          }
-
+          // 销毁单个物体的描边
          if (this.lineBox) {
            this.scene.remove(this.lineBox);
          }
-
+          // 销毁物体列表的描边
          if (this.thingLines.length !== 0) {
            this.thingLines.forEach(thing => {
             this.scene.remove(thing);
@@ -272,6 +269,7 @@ export default class Scene {
          }
 
          setTimeout(() => { 
+          //  重置所有仓库,物体数据
           this.warBoxs = [];
           this.warHeight = 0;
           this.warLength = 0;
@@ -279,6 +277,7 @@ export default class Scene {
           this.floor = null;
           this.thingObj = null;
           this.lineBox = null;
+          // 重置vuex仓库,物体列表
           store.commit('setWarInfo', {});
           store.commit('setThings', []);
           }, 0)
@@ -290,7 +289,6 @@ export default class Scene {
         loader.load(floorBg, (texture) => {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
           texture.repeat.set(10, 10);
-          //                                          宽  长  高
           const floorGeometry = new THREE.BoxGeometry(this.warWidth, this.warLength, 1);
           const floorMaterial = new THREE.MeshBasicMaterial({
             map: texture,
@@ -314,7 +312,7 @@ export default class Scene {
         this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //右
       }
       
-      // 创建墙体 this.createCubeWall(10, 200, 2600, 1.5, this.matArrayB, 0, 100, -700, "墙面");
+      // 创建墙体 
       createCubeWall = (width, height, depth, angle, material, x, y, z, name) => {
         const cubeGeometry = new THREE.BoxGeometry(width, height, depth);
         const cube = new THREE.Mesh(cubeGeometry, material);
@@ -380,7 +378,6 @@ export default class Scene {
       link.click();
     }
   
-
      animate = () => {
         requestAnimationFrame(this.animate);
         this.orbitControls.update();
