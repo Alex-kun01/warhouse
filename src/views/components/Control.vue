@@ -57,6 +57,7 @@ export default {
     right: 10px;
     border-radius: 8px;
     overflow: hidden;
+    pointer-events: all;
 
     .title {
         width: 100%;

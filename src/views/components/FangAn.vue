@@ -88,9 +88,10 @@ export default {
         $scene.removeWarhouse();
         const res = await axios.get('/mock/fangan.json');
         if (res.data.code === 200) {
-          const data = res.data.data;
+          const data = res.data.data.thingInfo;
+          const { length, width, height } = res.data.data.warInfo;
           setTimeout(() => {
-            $scene.createWarhouse('测试仓库',60, 60, 10);
+            $scene.createWarhouse('测试仓库',length, width, height);
             this.show = false;
             setTimeout(() => {
               data.forEach(item => {
