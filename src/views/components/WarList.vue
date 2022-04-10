@@ -55,7 +55,7 @@ export default {
 .warlist {
     width: 200px;
     min-height: 30px;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     margin-right: 10px;
     overflow: hidden;
     pointer-events: all;

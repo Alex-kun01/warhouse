@@ -105,7 +105,7 @@ export default {
 .now_war {
     width: 670px;
     min-height: 30px;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     margin-right: 10px;
     overflow: hidden;
     pointer-events: all;
@@ -195,7 +195,7 @@ export default {
           box-sizing: border-box;
           overflow-y: auto;
 
-          &::-webkit-scrollbar{
+            &::-webkit-scrollbar{
               width: 6px;
               height: 6px;
             }

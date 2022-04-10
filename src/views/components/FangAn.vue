@@ -1,6 +1,6 @@
 <template>
   <div class="warlist">
-    <div class="title" @click.self="show = !show">算法方案</div>
+    <div class="title" @click.self="show = !show">操作面板</div>
     <div class="concrol" v-show="show">
         <div class="select_box">
             <div class="select"
@@ -84,23 +84,10 @@ export default {
         const { sfWarList, sfThingList } = this.$store.state;
         if (sfThingList.length === 0) return this.$message({ type: 'warning', message: '请选择物体！' });
         if (sfWarList.length === 0) return this.$message({ type: 'warning', message: '请选择仓库！' });
-        this.$store.commit('setLoading', true);
-        $scene.removeWarhouse();
         const res = await axios.get('/mock/fangan.json');
         if (res.data.code === 200) {
-          const data = res.data.data.thingInfo;
-          const { length, width, height } = res.data.data.warInfo;
-          setTimeout(() => {
-            $scene.createWarhouse('测试仓库',length, width, height);
-            this.show = false;
-            setTimeout(() => {
-              data.forEach(item => {
-                $scene.createBox(item.name,+item.length, +item.width, +item.height, +item.posX, +item.posY, +item.posZ );
-              });
-              this.$store.commit('setLoading', false);
-            }, 1000)
-          }, 1000);
-          
+          this.$store.commit('setProgrammeList', res.data.data);
+          this.show = false;
         }
       },
       sfThingUpdata() {
@@ -116,7 +103,7 @@ export default {
 .warlist {
     width: 290px;
     min-height: 30px;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     margin-right: 10px;
     overflow: hidden;
     pointer-events: all;

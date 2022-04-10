@@ -8,6 +8,7 @@
       <Control />
       <NowWarinfo />
     </div>
+    <Programme />
   </div>
 </template>
 <script>
@@ -17,6 +18,7 @@ import ThingList from '../components/ThingList.vue';
 import FangAn from '../components/FangAn.vue';
 import Control from '../components/Control.vue';
 import NowWarinfo from '../components/NowWarinfo.vue';
+import Programme from '../components/Programme.vue';
 
 export default {
   name: 'mainScene',
@@ -24,6 +26,7 @@ export default {
     FangAn,
     Control,
     WarList,
+    Programme,
     ThingList,
     NowWarinfo,
   },

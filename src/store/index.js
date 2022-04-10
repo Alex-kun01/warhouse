@@ -17,6 +17,8 @@ export default new Vuex.Store({
       loading: false,
       // 当前场景选中的物体id
       activeId: '',
+      // 计算得到的方案列表
+      programmeList: null,
     },
     mutations: {
       setWarInfo: (state, data) => {
@@ -36,6 +38,9 @@ export default new Vuex.Store({
       },
       setActiveId: (state, data) => {
         state.activeId = data;
+      },
+      setProgrammeList: (state, data) => {
+        state.programmeList = data;
       }
     }
 });

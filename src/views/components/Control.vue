@@ -55,7 +55,7 @@ export default {
     position: absolute;
     top: 10px;
     right: 10px;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     overflow: hidden;
     pointer-events: all;
 
