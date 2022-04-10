@@ -12,11 +12,25 @@ window.config = {
           height: 1000,
           // 天空盒配置 可配参数如下 可自定义天空盒 路径 'static/images/skybox'
           // BlueSky CloudySky Dark DarkBlue MilkyWay White Night Universal DeepAsh Grassland
-          skyBox: 'White',
+          skyBox: 'Night',
         },
         warOpts: {
           // 仓库墙体透明度配置0-1
-          opacity: 0.4
+          opacity: 0.4,
+        },
+        thingOPts: {
+          // 外发光-物体选中效果颜色 16进制颜色值 0x + ffff00
+          outLineColor: 0xffff00,
+          // 外发光-呼吸闪烁的速度
+          pulsePeriod: 3,
+          // 外发光-边框的亮度
+          edgeStrength: 10.0,
+          // 外发光-光晕 [0,1]
+          edgeGlow: 1,
+          // 外发光-边框宽度
+          edgeThickness: 1.0,
+          // 外发光-边框弯曲度
+          downSampleRatio: 1
         },
         // 相机配置
         carams: {

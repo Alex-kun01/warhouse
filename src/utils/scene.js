@@ -24,8 +24,14 @@ export default class Scene {
         this.thingLines = []; // 箱子描边数组
         this.thingObj = null; // 单个箱子
         this.lineBox = null; // 单个箱子描边
+        this.raycaster = null;
+        this.mouse = null;
         this.init();
         this.animate();
+        this.composer = null;
+        this.outlinePass = null;
+        this.renderPass = null;
+
     }
 
     init = () => {
@@ -36,6 +42,9 @@ export default class Scene {
         this.initRenderer();
         this.openOrbitControls();
         this.createWallMaterail();
+        this.target.addEventListener( "mousedown", this.thingClickEnent, false );
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
     }
 
     // 初始化场景
@@ -47,7 +56,7 @@ export default class Scene {
     initCamera = () => {
         this.camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1500);
         this.camera.name = 'mainCamrea';
-        window.jcamera = this.camera;
+        window.$camera = this.camera;
     }
 
     // 初始化灯光
@@ -56,11 +65,57 @@ export default class Scene {
         directionalLight.color.setHSL(0.1, 1, 0.95);
         directionalLight.position.set(0, 200, 0).normalize();
         this.scene.add(directionalLight);
-  
         const ambient = new THREE.AmbientLight(0xffffff, 1); //AmbientLight,影响整个场景的光源
         ambient.position.set(0, 0, 0);
         this.scene.add(ambient);
-      }
+    }
+
+    // 开启外发光
+    outlineObj = (selectedObjects) => {
+      const { outLineColor, pulsePeriod, edgeStrength, edgeGlow, edgeThickness } = window.config.sceneParams.thingOPts;
+      // 创建一个EffectComposer（效果组合器）对象，然后在该对象上添加后期处理通道。
+      this.composer = new THREE.EffectComposer(this.renderer)
+      // 新建一个场景通道  为了覆盖到原理来的场景上
+      this.renderPass = new THREE.RenderPass(this.scene, this.camera)
+      this.composer.addPass(this.renderPass);
+      // 物体边缘发光通道
+      this.outlinePass = new THREE.OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera, selectedObjects)
+      this.outlinePass.selectedObjects = selectedObjects
+      this.outlinePass.edgeStrength = edgeStrength // 边框的亮度
+      this.outlinePass.edgeGlow = edgeGlow// 光晕[0,1]
+      this.outlinePass.usePatternTexture = false // 是否使用父级的材质
+      this.outlinePass.edgeThickness = edgeThickness// 边框宽度
+      this.outlinePass.downSampleRatio = 1 // 边框弯曲度
+      this.outlinePass.pulsePeriod = pulsePeriod // 呼吸闪烁的速度
+      this.outlinePass.visibleEdgeColor.set(parseInt(outLineColor)) // 呼吸显示的颜色
+      this.outlinePass.hiddenEdgeColor = new THREE.Color(0, 0, 0) // 呼吸消失的颜色
+      this.outlinePass.clear = true
+      this.composer.addPass(this.outlinePass)
+      // 自定义的着色器通道 作为参数
+      var effectFXAA = new THREE.ShaderPass(THREE.FXAAShader)
+      effectFXAA.uniforms.resolution.value.set(1 / window.innerWidth, 1 / window.innerHeight)
+      effectFXAA.renderToScreen = true
+      this.composer.addPass(effectFXAA)
+    }
+
+    // 物体点击事件
+    thingClickEnent = (e) => {
+        e.preventDefault();
+        // 将鼠标点击位置的屏幕坐标转换成threejs中的标准坐标
+        this.mouse.x = ((e.clientX - this.target.getBoundingClientRect().left) / this.target.offsetWidth) * 2 - 1
+        this.mouse.y = -((e.clientY - this.target.getBoundingClientRect().top) / this.target.offsetHeight) * 2 + 1
+        // 通过鼠标的位置和当前相机的矩阵计算出raycaster
+        this.raycaster.setFromCamera( this.mouse, this.camera );
+        // 获取raycaster直线和所有模型相交的数组集合
+        const allThings = this.scene.children.filter(item => item.uuidx);
+        const intersects = this.raycaster.intersectObjects( allThings, true );
+        // 筛选出需要点击的物体
+        if (intersects.length !== 0) {
+          const target = intersects[0].object;
+          this.outlineObj([target]);
+          store.commit('setActiveId', target.uuidx);
+        }
+    }
 
     //region 放置天空盒
     addSkybox = ( size,scene ) => {
@@ -377,10 +432,19 @@ export default class Scene {
       link.download = store.state.warInfo.name;
       link.click();
     }
+
+    // 根据id使物体外发光
+    getIdThingOutline = (id) => {
+      const targets = this.things.filter(item => item.uuidx === id);
+      if (targets.length !== 0) this.outlineObj(targets);
+    }
   
      animate = () => {
         requestAnimationFrame(this.animate);
         this.orbitControls.update();
         this.renderer.render(this.scene, this.camera);
+        if (this.composer) {
+          this.composer.render()
+        }
      }
 }

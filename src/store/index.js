@@ -15,6 +15,8 @@ export default new Vuex.Store({
       // 算法-物体
       sfThingList: [],
       loading: false,
+      // 当前场景选中的物体id
+      activeId: '',
     },
     mutations: {
       setWarInfo: (state, data) => {
@@ -31,6 +33,9 @@ export default new Vuex.Store({
       },
       setLoading: (state, data) => {
         state.loading = data;
+      },
+      setActiveId: (state, data) => {
+        state.activeId = data;
       }
     }
 });

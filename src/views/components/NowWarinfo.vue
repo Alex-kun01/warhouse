@@ -23,7 +23,9 @@
           <span>删除</span>
         </div>
         <div class="list_box">
-          <div class="thing_item" v-for="(item, index) in things" :key="index">
+          <div :class="{thing_item: 1, active: item.id === $store.state.activeId}" v-for="(item, index) in things" :key="index"
+            @click="choseItem(item)"
+          >
             <span id="color" :style="{background: item.color}"></span>
             <span>{{item.name}}</span>
             <span>{{item.length}}</span>
@@ -83,6 +85,11 @@ export default {
       this.warInfo = this.$store.state.warInfo;
       if (this.$store.state.warInfo.name) this.warShow = true;
       else this.warShow = false;
+    },
+    choseItem(item) {
+      this.$store.commit('setActiveId', item.id);
+      console.log('item', item)
+      $scene.getIdThingOutline(item.id);
     },
     deleteThing(item) {
       $scene.deleteBox(item.id)
@@ -207,6 +214,7 @@ export default {
             &::-webkit-scrollbar-corner{
               background: #999;
             }
+
           .thing_item {
             color: #000;
             height: 24px;
@@ -239,6 +247,11 @@ export default {
 
             &:hover{
               background-color: #ddd;
+            }
+
+            &.active {
+              background: #008c8c;
+              font-weight: 500;
             }
 
             span {
