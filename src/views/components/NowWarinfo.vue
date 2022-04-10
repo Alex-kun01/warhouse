@@ -88,7 +88,6 @@ export default {
     },
     choseItem(item) {
       this.$store.commit('setActiveId', item.id);
-      console.log('item', item)
       $scene.getIdThingOutline(item.id);
     },
     deleteThing(item) {
@@ -250,7 +249,7 @@ export default {
             }
 
             &.active {
-              background: #008c8c;
+              background: yellow;
               font-weight: 500;
             }
 

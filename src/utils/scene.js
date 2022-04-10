@@ -108,7 +108,8 @@ export default class Scene {
         this.raycaster.setFromCamera( this.mouse, this.camera );
         // 获取raycaster直线和所有模型相交的数组集合
         const allThings = this.scene.children.filter(item => item.uuidx);
-        const intersects = this.raycaster.intersectObjects( allThings, true );
+        // 剔除描边物体
+        const intersects = this.raycaster.intersectObjects( allThings ).filter(item => !item.object.name.includes('描边'));
         // 筛选出需要点击的物体
         if (intersects.length !== 0) {
           const target = intersects[0].object;
