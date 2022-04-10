@@ -26,12 +26,11 @@ export default class Scene {
         this.lineBox = null; // 单个箱子描边
         this.raycaster = null;
         this.mouse = null;
-        this.init();
-        this.animate();
         this.composer = null;
         this.outlinePass = null;
         this.renderPass = null;
-
+        this.init();
+        this.animate();
     }
 
     init = () => {
@@ -70,54 +69,6 @@ export default class Scene {
         this.scene.add(ambient);
     }
 
-    // 开启外发光
-    outlineObj = (selectedObjects) => {
-      const { outLineColor, pulsePeriod, edgeStrength, edgeGlow, edgeThickness } = window.config.sceneParams.thingOPts;
-      // 创建一个EffectComposer（效果组合器）对象，然后在该对象上添加后期处理通道。
-      this.composer = new THREE.EffectComposer(this.renderer)
-      // 新建一个场景通道  为了覆盖到原理来的场景上
-      this.renderPass = new THREE.RenderPass(this.scene, this.camera)
-      this.composer.addPass(this.renderPass);
-      // 物体边缘发光通道
-      this.outlinePass = new THREE.OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera, selectedObjects)
-      this.outlinePass.selectedObjects = selectedObjects
-      this.outlinePass.edgeStrength = edgeStrength // 边框的亮度
-      this.outlinePass.edgeGlow = edgeGlow// 光晕[0,1]
-      this.outlinePass.usePatternTexture = false // 是否使用父级的材质
-      this.outlinePass.edgeThickness = edgeThickness// 边框宽度
-      this.outlinePass.downSampleRatio = 1 // 边框弯曲度
-      this.outlinePass.pulsePeriod = pulsePeriod // 呼吸闪烁的速度
-      this.outlinePass.visibleEdgeColor.set(parseInt(outLineColor)) // 呼吸显示的颜色
-      this.outlinePass.hiddenEdgeColor = new THREE.Color(0, 0, 0) // 呼吸消失的颜色
-      this.outlinePass.clear = true
-      this.composer.addPass(this.outlinePass)
-      // 自定义的着色器通道 作为参数
-      var effectFXAA = new THREE.ShaderPass(THREE.FXAAShader)
-      effectFXAA.uniforms.resolution.value.set(1 / window.innerWidth, 1 / window.innerHeight)
-      effectFXAA.renderToScreen = true
-      this.composer.addPass(effectFXAA)
-    }
-
-    // 物体点击事件
-    thingClickEnent = (e) => {
-        e.preventDefault();
-        // 将鼠标点击位置的屏幕坐标转换成threejs中的标准坐标
-        this.mouse.x = ((e.clientX - this.target.getBoundingClientRect().left) / this.target.offsetWidth) * 2 - 1
-        this.mouse.y = -((e.clientY - this.target.getBoundingClientRect().top) / this.target.offsetHeight) * 2 + 1
-        // 通过鼠标的位置和当前相机的矩阵计算出raycaster
-        this.raycaster.setFromCamera( this.mouse, this.camera );
-        // 获取raycaster直线和所有模型相交的数组集合
-        const allThings = this.scene.children.filter(item => item.uuidx);
-        // 剔除描边物体
-        const intersects = this.raycaster.intersectObjects( allThings ).filter(item => !item.object.name.includes('描边'));
-        // 筛选出需要点击的物体
-        if (intersects.length !== 0) {
-          const target = intersects[0].object;
-          this.outlineObj([target]);
-          store.commit('setActiveId', target.uuidx);
-        }
-    }
-
     //region 放置天空盒
     addSkybox = ( size,scene ) => {
         const urls = [right,left,top,bottom,back,front];
@@ -139,29 +90,29 @@ export default class Scene {
          this.scene.add( obj );
      }
 
-     // 初始化渲染器
-     initRenderer = () => {
-        this.renderer = new THREE.WebGLRenderer({
-          antialias: true,
-          preserveDrawingBuffer: true,
-        });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setClearColor(0x4682B4, 1.0);
-        this.target.append(this.renderer.domElement);
-        this.renderer.render(this.scene, this.camera);
-        this.camera.position.x = 90;
-        this.camera.position.y = 90;
-        this.camera.position.z = 0;
-      }
+    // 初始化渲染器
+    initRenderer = () => {
+      this.renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        preserveDrawingBuffer: true,
+      });
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setClearColor(0x4682B4, 1.0);
+      this.target.append(this.renderer.domElement);
+      this.renderer.render(this.scene, this.camera);
+      this.camera.position.x = 90;
+      this.camera.position.y = 90;
+      this.camera.position.z = 0;
+    }
 
-     /**
+    /**
       *  创建仓库
       * @param {*} length 长
       * @param {*} width  宽
       * @param {*} height 高
       * @returns 
       */
-     createWarhouse = (name,length, width, height) => {
+    createWarhouse = (name,length, width, height) => {
         if (this.warBoxs.length !== 0) return;
         this.warHeight = height;
         this.warLength = length + 2;
@@ -186,21 +137,21 @@ export default class Scene {
             length: this.warLength
           })
         },0)
-     }
-     
-     // 创建箱子
-     createBox = (name,length, width, height, x = 0, y = 0, z = 0) => {
+    }
+    
+    // 创建箱子
+    createBox = (name,length, width, height, x = 0, y = 0, z = 0) => {
       //  未创建仓库时 直接创建箱子
-       if (this.warBoxs.length === 0) {
-         this.createBoxOntWar(name,length, width, height, x, y, z);
+      if (this.warBoxs.length === 0) {
+        this.createBoxOntWar(name,length, width, height, x, y, z);
         return;
-       }
-       const uuid = this.getUuid();
+      }
+      const uuid = this.getUuid();
       //  已经创建仓库时 创建箱子
       if (!length || !width || !height || this.warBoxs.length === 0) return;
       // 使用图片加载箱子
       // const cubeGeo = new THREE.BoxBufferGeometry( width, height, length );
-			// const cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( boxBg ) } );
+      // const cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( boxBg ) } );
       // const voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
       const color = this.getRadomColor();
       const geometry1 = new THREE.BoxGeometry( width, height, length );
@@ -231,7 +182,7 @@ export default class Scene {
       this.things.push(box);
       this.thingLines.push(line);
       this.storeBoxCreate(name,length, width, height, x, y, z, color, uuid);
-     }
+    }
 
     //  无仓库创建箱子
     createBoxOntWar = (name,length, width, height, x, y, z) => {
@@ -295,91 +246,91 @@ export default class Scene {
       if (targetLine[0]) this.scene.remove(targetLine[0]);
     }
 
-     // 销毁仓库
-     removeWarhouse = () => {
-          // 销毁仓库列表
-         if (this.warBoxs.length !== 0) {
-           this.warBoxs.forEach(thing => {
-            this.scene.remove(thing);
-           })
-         };
-          // 销毁物体列表
-         if (this.things.length !== 0) {
-          this.things.forEach(thing => {
-            this.scene.remove(thing);
-           })
-         }
-          // 销毁单个物体
-         if (this.thingObj) {
-           this.scene.remove(this.thingObj);
-         }
-          // 销毁单个物体的描边
-         if (this.lineBox) {
-           this.scene.remove(this.lineBox);
-         }
-          // 销毁物体列表的描边
-         if (this.thingLines.length !== 0) {
-           this.thingLines.forEach(thing => {
-            this.scene.remove(thing);
-           })
-         }
+    // 销毁场景所有数据
+    removeWarhouse = () => {
+        // 销毁仓库列表
+        if (this.warBoxs.length !== 0) {
+          this.warBoxs.forEach(thing => {
+          this.scene.remove(thing);
+          })
+        };
+        // 销毁物体列表
+        if (this.things.length !== 0) {
+        this.things.forEach(thing => {
+          this.scene.remove(thing);
+          })
+        }
+        // 销毁单个物体
+        if (this.thingObj) {
+          this.scene.remove(this.thingObj);
+        }
+        // 销毁单个物体的描边
+        if (this.lineBox) {
+          this.scene.remove(this.lineBox);
+        }
+        // 销毁物体列表的描边
+        if (this.thingLines.length !== 0) {
+          this.thingLines.forEach(thing => {
+          this.scene.remove(thing);
+          })
+        }
 
-         setTimeout(() => { 
-          //  重置所有仓库,物体数据
-          this.warBoxs = [];
-          this.warHeight = 0;
-          this.warLength = 0;
-          this.warWidth = 0;
-          this.floor = null;
-          this.thingObj = null;
-          this.lineBox = null;
-          // 重置vuex仓库,物体列表
-          store.commit('setWarInfo', {});
-          store.commit('setThings', []);
-          }, 0)
-     }
-    
-     // 创建地板
-     createFloor = () => {
-        const loader = new THREE.TextureLoader();
-        loader.load(floorBg, (texture) => {
-          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-          texture.repeat.set(10, 10);
-          const floorGeometry = new THREE.BoxGeometry(this.warWidth, this.warLength, 1);
-          const floorMaterial = new THREE.MeshBasicMaterial({
-            map: texture,
-          });
-          this.floor = new THREE.Mesh(floorGeometry, floorMaterial);
-          this.floor.rotation.x = -Math.PI / 2;
-          this.floor.name = "地面";
-          this.scene.add(this.floor);
-          this.warBoxs.push(this.floor);
+        setTimeout(() => { 
+        //  重置所有仓库,物体数据
+        this.warBoxs = [];
+        this.warHeight = 0;
+        this.warLength = 0;
+        this.warWidth = 0;
+        this.floor = null;
+        this.thingObj = null;
+        this.lineBox = null;
+        // 重置vuex仓库,物体列表
+        store.commit('setWarInfo', {});
+        store.commit('setThings', []);
+        }, 0)
+    }
+  
+    // 创建地板
+    createFloor = () => {
+      const loader = new THREE.TextureLoader();
+      loader.load(floorBg, (texture) => {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(10, 10);
+        const floorGeometry = new THREE.BoxGeometry(this.warWidth, this.warLength, 1);
+        const floorMaterial = new THREE.MeshBasicMaterial({
+          map: texture,
         });
-      }
+        this.floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        this.floor.rotation.x = -Math.PI / 2;
+        this.floor.name = "地面";
+        this.scene.add(this.floor);
+        this.warBoxs.push(this.floor);
+      });
+    }
 
-      // 创建墙体纹理
-      createWallMaterail = () => {
-        const opacity = window.config.sceneParams.warOpts.opacity;
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //前  0xafc0ca :灰色
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0x9cb2d1, opacity, transparent:true }));  //后  0x9cb2d1：淡紫
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec, opacity, transparent:true }));  //上  0xd6e4ec： 偏白色
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec, opacity, transparent:true }));  //下
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //左   0xafc0ca :灰色
-        this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //右
-      }
-      
-      // 创建墙体 
-      createCubeWall = (width, height, depth, angle, material, x, y, z, name) => {
-        const cubeGeometry = new THREE.BoxGeometry(width, height, depth);
-        const cube = new THREE.Mesh(cubeGeometry, material);
-        cube.position.x = x;
-        cube.position.y = y;
-        cube.position.z = z;
-        cube.rotation.y += angle * Math.PI; //-逆时针旋转,+顺时针
-        cube.name = name;
-        this.scene.add(cube);
-        this.warBoxs.push(cube);
-      }
+    // 创建墙体纹理
+    createWallMaterail = () => {
+      const opacity = window.config.sceneParams.warOpts.opacity;
+      this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //前  0xafc0ca :灰色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0x9cb2d1, opacity, transparent:true }));  //后  0x9cb2d1：淡紫
+      this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec, opacity, transparent:true }));  //上  0xd6e4ec： 偏白色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xd6e4ec, opacity, transparent:true }));  //下
+      this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //左   0xafc0ca :灰色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({color: 0xafc0ca, opacity, transparent:true }));  //右
+    }
+    
+    // 创建墙体 
+    createCubeWall = (width, height, depth, angle, material, x, y, z, name) => {
+      const cubeGeometry = new THREE.BoxGeometry(width, height, depth);
+      const cube = new THREE.Mesh(cubeGeometry, material);
+      cube.position.x = x;
+      cube.position.y = y;
+      cube.position.z = z;
+      cube.rotation.y += angle * Math.PI; //-逆时针旋转,+顺时针
+      cube.name = name;
+      this.scene.add(cube);
+      this.warBoxs.push(cube);
+    }
 
     // 摄像机控制
     openOrbitControls = () => {
@@ -438,6 +389,55 @@ export default class Scene {
     getIdThingOutline = (id) => {
       const targets = this.things.filter(item => item.uuidx === id);
       if (targets.length !== 0) this.outlineObj(targets);
+    }
+
+    // 开启外发光
+    outlineObj = (selectedObjects) => {
+      const { outLineColor, pulsePeriod, edgeStrength, edgeGlow, edgeThickness } = window.config.sceneParams.thingOPts;
+      // 创建一个EffectComposer（效果组合器）对象，然后在该对象上添加后期处理通道。
+      this.composer = new THREE.EffectComposer(this.renderer)
+      // 新建一个场景通道  为了覆盖到原理来的场景上
+      this.renderPass = new THREE.RenderPass(this.scene, this.camera)
+      this.composer.addPass(this.renderPass);
+      // 物体边缘发光通道
+      this.outlinePass = new THREE.OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.scene, this.camera, selectedObjects)
+      this.outlinePass.selectedObjects = selectedObjects
+      this.outlinePass.edgeStrength = edgeStrength // 边框的亮度
+      this.outlinePass.edgeGlow = edgeGlow// 光晕[0,1]
+      this.outlinePass.usePatternTexture = false // 是否使用父级的材质
+      this.outlinePass.edgeThickness = edgeThickness// 边框宽度
+      this.outlinePass.downSampleRatio = 1 // 边框弯曲度
+      this.outlinePass.pulsePeriod = pulsePeriod // 呼吸闪烁的速度
+      this.outlinePass.visibleEdgeColor.set(parseInt(outLineColor)) // 呼吸显示的颜色
+      this.outlinePass.hiddenEdgeColor = new THREE.Color(0, 0, 0) // 呼吸消失的颜色
+      this.outlinePass.clear = true
+      this.composer.addPass(this.outlinePass)
+      // 自定义的着色器通道 作为参数
+      var effectFXAA = new THREE.ShaderPass(THREE.FXAAShader)
+      effectFXAA.uniforms.resolution.value.set(1 / window.innerWidth, 1 / window.innerHeight)
+      effectFXAA.renderToScreen = true
+      this.composer.addPass(effectFXAA)
+    }
+
+    // 物体点击事件
+    thingClickEnent = (e) => {
+        e.preventDefault();
+        // 将鼠标点击位置的屏幕坐标转换成threejs中的标准坐标
+        this.mouse.x = ((e.clientX - this.target.getBoundingClientRect().left) / this.target.offsetWidth) * 2 - 1
+        this.mouse.y = -((e.clientY - this.target.getBoundingClientRect().top) / this.target.offsetHeight) * 2 + 1
+        // 通过鼠标的位置和当前相机的矩阵计算出raycaster
+        this.raycaster.setFromCamera( this.mouse, this.camera );
+        // 获取raycaster直线和所有模型相交的数组集合
+        const allThings = this.scene.children.filter(item => item.uuidx);
+        // 剔除描边物体
+        const intersects = this.raycaster.intersectObjects( allThings );
+        const targets = intersects.filter(item => !item.object.name.includes('描边'));
+        // 筛选出需要点击的物体
+        if (targets.length !== 0) {
+          const target = targets[0].object;
+          this.outlineObj([target]);
+          store.commit('setActiveId', target.uuidx);
+        }
     }
   
      animate = () => {
