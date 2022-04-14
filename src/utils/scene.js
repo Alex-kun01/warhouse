@@ -29,6 +29,7 @@ export default class Scene {
         this.composer = null;
         this.outlinePass = null;
         this.renderPass = null;
+        this.orbit = {};
         this.init();
         this.animate();
     }
